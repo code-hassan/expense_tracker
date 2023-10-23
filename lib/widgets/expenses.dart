@@ -1,3 +1,4 @@
+
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +32,60 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay(){
-    showModalBottomSheet(context: context, builder: (context) => const NewExpense(),
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) =>
+          NewExpense(onAddExpense: _addExpense,
+          ),
+    );
+  }
+
+  void _addExpense(Expense expanse){
+   setState(() {
+     _registeredExpense.add(expanse);
+   });
+  }
+
+  void _removeExpense(Expense expanse){
+    final expenseIndex = _registeredExpense.indexOf(expanse);
+    setState(() {
+      _registeredExpense.remove(expanse);
+    });
+   ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          duration: const Duration(seconds: 3),
+          content: const Text("Expense Delete"),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: (){
+             setState(() {
+               _registeredExpense.insert(expenseIndex, expanse);
+             });
+            },
+          ),
+      ),
     );
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+
+    Widget mainContent = const Center(
+      child: Text("No expenses found. Start adding some!"),
+    );
+    if(_registeredExpense.isNotEmpty){
+      mainContent =  ExpensesList(
+        expenses: _registeredExpense,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter ExpenseTracker"),
@@ -52,9 +100,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text("The Chart"),
           Expanded(
-              child: ExpensesList(
-                  expenses: _registeredExpense,
-              ),
+              child: mainContent,
           ),
         ],
       ),
