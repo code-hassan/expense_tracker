@@ -97,14 +97,21 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
+      body: MediaQuery.of(context).size.width < 600
+          ? Column(
         children: [
           Chart(expenses: _registeredExpense,),
           Expanded(
               child: mainContent,
           ),
         ],
-      ),
+      )
+          : Row(children: [
+        Expanded(child: Chart(expenses: _registeredExpense,)),
+        Expanded(
+          child: mainContent,
+        ),
+      ],),
     );
   }
 }
