@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();  /// this is used for app permanent in portrait mode the app rotation will be not change
+  WidgetsFlutterBinding.ensureInitialized();  /// this is used for app permanent in portrait mode the app rotation will be not change
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
-  // ]).then(
-  //       (value) => );
+  //   DeviceOrientation.portraitDown,
+  //   DeviceOrientation.landscapeLeft,
+  //   DeviceOrientation.landscapeRight,
+  // ]);
   runApp(const MyApp());
 }
 var kColorScheme = ColorScheme.fromSeed(
